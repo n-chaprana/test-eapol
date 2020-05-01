@@ -24,6 +24,8 @@
 #include "EapUtil.h"
 
 typedef struct {
+	connection_ethernet_eap_type_e type;
+	connection_ethernet_eap_auth_type_e auth_type;
 	const char *identity;
 	const char *password;
 	const char *anonymous_identity;
@@ -32,17 +34,20 @@ typedef struct {
 	const char *private_key_filename;
 	const char *private_key_password;
 	const char *pac_filename;
-	connection_ethernet_eap_type_e type;
-	connection_ethernet_eap_auth_type_e auth_type;
 	connection_ethernet_eap_peap_version_e peap_version;
 } eap_on_ethernet_s;
 
 class EapOnEthernet {
 private:
+	connection_h connection;
 	bool use_eapol;
 	eap_on_ethernet_s eap_settings;
 
+	static void connectionOpenedCallback(connection_error_e result, void* user_data);
+
+	error_e GetEthernetProfile(connection_profile_h &profile);
 	error_e ApplyEapSettings(connection_profile_h profile);
+	error_e OpenConnection(connection_profile_h profile);
 public:
 	EapOnEthernet(void);
 	EapOnEthernet(bool user_eapol, eap_on_ethernet_s eap_settings);

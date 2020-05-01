@@ -30,7 +30,7 @@ using ::testing::Test;
 using ::testing::TestCase;
 using namespace std;
 
-TEST(EapOnEthernet, checkEthernetConnectionMD5_p)
+TEST(EapOnEthernet, checkEthernetConnectionMD5_p1)
 {
 	error_e ret = ERROR_NONE;
 	EapOnEthernet eapol;
@@ -39,10 +39,24 @@ TEST(EapOnEthernet, checkEthernetConnectionMD5_p)
 	EXPECT_EQ(ERROR_NONE, ret);
 }
 
-TEST(EapOnEthernet, checkEthernetConnectionTLS_p)
+TEST(EapOnEthernet, checkEthernetConnectionMD5_p2)
 {
 	error_e ret = ERROR_NONE;
-	EapOnEthernet eapol;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_MD5,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_NONE,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = NULL,
+		.ca_cert_filename = NULL,
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
 
 	ret = eapol.checkEthernetConnection();
 	EXPECT_EQ(ERROR_NONE, ret);
