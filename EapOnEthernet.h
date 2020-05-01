@@ -43,11 +43,21 @@ private:
 	bool use_eapol;
 	eap_on_ethernet_s eap_settings;
 
+	static connection_error_e connected_result;
+	static GMainLoop *mainLoop;
+	static guint timeoutId;
+
 	static void connectionOpenedCallback(connection_error_e result, void* user_data);
+	static void connectionClosedCallback(connection_error_e result, void* user_data);
+	static gboolean timeout_callback(gpointer data);
+
+	static void runGMainLoop(int timeout);
+	static void quitGMainLoop(void);
 
 	error_e GetEthernetProfile(connection_profile_h &profile);
 	error_e ApplyEapSettings(connection_profile_h profile);
 	error_e OpenConnection(connection_profile_h profile);
+	error_e CloseConnection(connection_profile_h profile);
 public:
 	EapOnEthernet(void);
 	EapOnEthernet(bool user_eapol, eap_on_ethernet_s eap_settings);

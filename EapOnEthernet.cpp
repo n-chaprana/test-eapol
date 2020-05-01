@@ -23,20 +23,14 @@
 
 #include "EapOnEthernet.h"
 
+GMainLoop *EapOnEthernet::mainLoop = NULL;
+guint EapOnEthernet::timeoutId = 0;
+connection_error_e EapOnEthernet::connected_result = CONNECTION_ERROR_NONE;
+
 EapOnEthernet::EapOnEthernet(void)
 {
-	use_eapol = true;
-	eap_settings.type = CONNECTION_ETHERNET_EAP_TYPE_MD5;
-	eap_settings.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_NONE;
-	eap_settings.identity = "testing";
-	eap_settings.password = "password";
-	eap_settings.anonymous_identity = NULL;
-	eap_settings.ca_cert_filename = NULL;
-	eap_settings.client_cert_filename = NULL;
-	eap_settings.private_key_filename = NULL;
-	eap_settings.private_key_password = NULL;
-	eap_settings.pac_filename = NULL;
-	eap_settings.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO;
+	/* By default Normal ethernet connection should be configured */
+	use_eapol = false;
 
 	connection_create(&connection);
 }
@@ -64,8 +58,55 @@ EapOnEthernet::~EapOnEthernet(void)
 	connection_destroy(connection);
 }
 
+gboolean EapOnEthernet::timeout_callback(gpointer data)
+{
+	timeoutId = 0;
+	EapOnEthernet::quitGMainLoop();
+	return FALSE;
+}
+
+void EapOnEthernet::runGMainLoop(int timeout)
+{
+	mainLoop = g_main_loop_new(NULL, false);
+	timeoutId = g_timeout_add_seconds(timeout, EapOnEthernet::timeout_callback, mainLoop);
+	g_main_loop_run(mainLoop);
+	if (timeoutId)
+		g_source_remove(timeoutId);
+	mainLoop = NULL;
+}
+
+void EapOnEthernet::quitGMainLoop(void)
+{
+	if (mainLoop) {
+		g_main_loop_quit(mainLoop);
+		mainLoop = NULL;
+	}
+}
+
+void EapOnEthernet::connectionClosedCallback(connection_error_e result, void* user_data)
+{
+	if (result ==  CONNECTION_ERROR_NONE)
+		GLOGD("Connection close Succeeded");
+	else
+		GLOGD("Connection close Failed");
+
+	connected_result = result;
+	EapOnEthernet::quitGMainLoop();
+}
+
+void EapOnEthernet::connectionOpenedCallback(connection_error_e result, void* user_data)
+{
+	if (result ==  CONNECTION_ERROR_NONE)
+		GLOGD("Connection open Succeeded");
+	else
+		GLOGD("Connection open Failed");
+
+	EapOnEthernet::quitGMainLoop();
+}
+
 error_e EapOnEthernet::GetEthernetProfile(connection_profile_h &profile)
 {
+	GLOGD("Get ethernet profile");
 	connection_profile_iterator_h profile_iter;
 	connection_profile_h profile_h;
 	connection_profile_type_e profile_type;
@@ -103,6 +144,7 @@ error_e EapOnEthernet::GetEthernetProfile(connection_profile_h &profile)
 
 error_e EapOnEthernet::ApplyEapSettings(connection_profile_h profile)
 {
+	GLOGD("Apply EAP Settings");
 	connection_profile_enable_ethernet_eap(profile, use_eapol);
 	switch (eap_settings.type) {
 		case CONNECTION_ETHERNET_EAP_TYPE_MD5:
@@ -117,16 +159,12 @@ error_e EapOnEthernet::ApplyEapSettings(connection_profile_h profile)
 	return ERROR_NONE;
 }
 
-void EapOnEthernet::connectionOpenedCallback(connection_error_e result, void* user_data)
-{
-	if (result ==  CONNECTION_ERROR_NONE)
-		GLOGD("Connection open Succeeded");
-	else
-		GLOGD("Connection open Failed");
-}
-
 error_e EapOnEthernet::OpenConnection(connection_profile_h profile)
 {
+	GLOGD("Open connection");
+
+	connected_result = CONNECTION_ERROR_NONE;
+
 	if (connection_open_profile(connection, profile,
 				EapOnEthernet::connectionOpenedCallback, NULL)
 			!= CONNECTION_ERROR_NONE) {
@@ -134,6 +172,34 @@ error_e EapOnEthernet::OpenConnection(connection_profile_h profile)
 		return ERROR_OPERATION_FAILED;
 	}
 
+	runGMainLoop(20);
+	return ERROR_NONE;
+}
+
+error_e EapOnEthernet::CloseConnection(connection_profile_h profile)
+{
+	GLOGD("Close connection");
+	connection_profile_state_e profile_state;
+
+	if (connection_profile_get_state(profile, &profile_state)
+			!= CONNECTION_ERROR_NONE) {
+		GLOGD("Fail to get profile state");
+		return ERROR_OPERATION_FAILED;
+	}
+
+	if (profile_state == CONNECTION_PROFILE_STATE_DISCONNECTED) {
+		GLOGD("Connection is already closed");
+		return ERROR_NONE;
+	}
+
+	if (connection_close_profile(connection, profile,
+				EapOnEthernet::connectionClosedCallback, NULL)
+			!= CONNECTION_ERROR_NONE) {
+		GLOGD("Connection close Failed!!");
+		return ERROR_OPERATION_FAILED;
+	}
+
+	runGMainLoop(5);
 	return ERROR_NONE;
 }
 
@@ -145,6 +211,8 @@ error_e EapOnEthernet::checkEthernetConnection(void)
 
 	GetEthernetProfile(profile);
 
+	CloseConnection(profile);
+
 	if (use_eapol) {
 		ret = ApplyEapSettings(profile);
 		if (ret != ERROR_NONE)
@@ -153,6 +221,12 @@ error_e EapOnEthernet::checkEthernetConnection(void)
 
 	OpenConnection(profile);
 
+	// Extra time to get IP assigned callback
+	runGMainLoop(2);
+
 	GLOGD("Executed test case");
+	if (connected_result != CONNECTION_ERROR_NONE)
+		return ERROR_OPERATION_FAILED;
+
 	return ERROR_NONE;
 }

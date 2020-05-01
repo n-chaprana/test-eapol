@@ -30,7 +30,10 @@ using ::testing::Test;
 using ::testing::TestCase;
 using namespace std;
 
-TEST(EapOnEthernet, checkEthernetConnectionMD5_p1)
+/*
+ * Testcase: Normal ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionNormal_p)
 {
 	error_e ret = ERROR_NONE;
 	EapOnEthernet eapol;
@@ -39,6 +42,9 @@ TEST(EapOnEthernet, checkEthernetConnectionMD5_p1)
 	EXPECT_EQ(ERROR_NONE, ret);
 }
 
+/*
+ * Testcase: MD5 ethernet connection.
+ */
 TEST(EapOnEthernet, checkEthernetConnectionMD5_p2)
 {
 	error_e ret = ERROR_NONE;
