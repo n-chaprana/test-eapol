@@ -45,7 +45,7 @@ TEST(EapOnEthernet, checkEthernetConnectionNormal_p)
 /*
  * Testcase: MD5 ethernet connection.
  */
-TEST(EapOnEthernet, checkEthernetConnectionMD5_p2)
+TEST(EapOnEthernet, checkEthernetConnectionMD5_p)
 {
 	error_e ret = ERROR_NONE;
 	eap_on_ethernet_s settings = {
@@ -55,6 +55,32 @@ TEST(EapOnEthernet, checkEthernetConnectionMD5_p2)
 		.password = "password",
 		.anonymous_identity = NULL,
 		.ca_cert_filename = NULL,
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (TTLS + MSCHAPV2) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionTTLS_p1)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_TTLS,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAPV2,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
 		.client_cert_filename = NULL,
 		.private_key_filename = NULL,
 		.private_key_password = NULL,
