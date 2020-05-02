@@ -57,9 +57,61 @@ TEST(EapOnEthernet, checkEthernetConnectionMD5_p)
 }
 
 /*
- * Testcase: (TTLS + MSCHAPV2) ethernet connection.
+ * Testcase: (TTLS + PAP) ethernet connection.
  */
 TEST(EapOnEthernet, checkEthernetConnectionTTLS_p1)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_TTLS,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_PAP,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (TTLS + MSCHAP) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionTTLS_p2)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_TTLS,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAP,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (TTLS + MSCHAPV2) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionTTLS_p3)
 {
 	error_e ret = ERROR_NONE;
 	eap_on_ethernet_s settings = {
@@ -74,6 +126,344 @@ TEST(EapOnEthernet, checkEthernetConnectionTTLS_p1)
 		.private_key_password = NULL,
 		.pac_filename = NULL,
 		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (TTLS + GTC) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionTTLS_p4)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_TTLS,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_GTC,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + PAP + PEAP_AUTO) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p1)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_PAP,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + MSCHAP + PEAP_AUTO) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p2)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAP,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + MSCHAPV2 + PEAP_AUTO) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p3)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAPV2,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + GTC + PEAP_AUTO) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p4)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_GTC,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + PAP + PEAP_V0) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p5)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_PAP,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_0
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + MSCHAP + PEAP_V0) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p6)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAP,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_0
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + MSCHAPV2 + PEAP_V0) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p7)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAPV2,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_0
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + GTC + PEAP_V0) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p8)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_GTC,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_0
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + PAP + PEAP_V1) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p9)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_PAP,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_1
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + MSCHAP + PEAP_V1) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p10)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAP,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_1
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + MSCHAPV2 + PEAP_V1) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p11)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAPV2,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_1
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + GTC + PEAP_V1) ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p12)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_GTC,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_1
 	};
 
 	EapOnEthernet eapol(true, settings);
