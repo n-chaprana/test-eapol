@@ -147,17 +147,21 @@ error_e EapOnEthernet::ApplyEapSettings(connection_profile_h profile)
 	GLOGD("Apply EAP Settings");
 
 	connection_profile_enable_ethernet_eap(profile, use_eapol);
-	if (!use_eapol)
+	if (!use_eapol) {
+		GLOGD("Normal connection mode, do not apply EAP settings");
 		return ERROR_NONE;
+	}
 
 	connection_profile_set_ethernet_eap_type(profile, eap_settings.type);
 
 	switch (eap_settings.type) {
 		case CONNECTION_ETHERNET_EAP_TYPE_MD5:
+			GLOGD("Setting MD5");
 			connection_profile_set_ethernet_eap_passphrase(profile,
 				       	eap_settings.identity, eap_settings.password);
 			break;
 		case CONNECTION_ETHERNET_EAP_TYPE_TTLS:
+			GLOGD("Setting TTLS");
 			connection_profile_set_ethernet_eap_anonymous_identity(profile,
 					eap_settings.anonymous_identity);
 			connection_profile_set_ethernet_eap_ca_cert_file(profile,
@@ -168,6 +172,7 @@ error_e EapOnEthernet::ApplyEapSettings(connection_profile_h profile)
 					eap_settings.identity, eap_settings.password);
 			break;
 		case CONNECTION_ETHERNET_EAP_TYPE_PEAP:
+			GLOGD("Setting PEAP");
 			connection_profile_set_ethernet_eap_anonymous_identity(profile,
 					eap_settings.anonymous_identity);
 			connection_profile_set_ethernet_eap_ca_cert_file(profile,
@@ -184,6 +189,8 @@ error_e EapOnEthernet::ApplyEapSettings(connection_profile_h profile)
 			return ERROR_OPERATION_FAILED;
 	}
 
+	connection_profile_save_ethernet_eap_config(connection, profile);
+
 	return ERROR_NONE;
 }
 
@@ -191,7 +198,7 @@ error_e EapOnEthernet::OpenConnection(connection_profile_h profile)
 {
 	GLOGD("Open connection");
 
-	connected_result = CONNECTION_ERROR_NONE;
+	connected_result = CONNECTION_ERROR_OPERATION_FAILED;
 
 	if (connection_open_profile(connection, profile,
 				EapOnEthernet::connectionOpenedCallback, NULL)
@@ -200,7 +207,7 @@ error_e EapOnEthernet::OpenConnection(connection_profile_h profile)
 		return ERROR_OPERATION_FAILED;
 	}
 
-	runGMainLoop(20);
+	runGMainLoop(60);
 	return ERROR_NONE;
 }
 
@@ -244,6 +251,10 @@ error_e EapOnEthernet::checkEthernetConnection(void)
 	ret = ApplyEapSettings(profile);
 	if (ret != ERROR_NONE)
 		return ret;
+
+	if (system("cat /opt/usr/data/network/eth0-eapol.conf") == -1)
+		std::cout << "Exception occurred. Unable to capture config file" << std::endl;
+	std::cout << std::endl;
 
 	OpenConnection(profile);
 

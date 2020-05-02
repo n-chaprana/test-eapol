@@ -135,87 +135,9 @@ TEST(EapOnEthernet, checkEthernetConnectionTTLS_p3)
 }
 
 /*
- * Testcase: (TTLS + GTC) ethernet connection.
- */
-TEST(EapOnEthernet, checkEthernetConnectionTTLS_p4)
-{
-	error_e ret = ERROR_NONE;
-	eap_on_ethernet_s settings = {
-		.type = CONNECTION_ETHERNET_EAP_TYPE_TTLS,
-		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_GTC,
-		.identity = "testing",
-		.password = "password",
-		.anonymous_identity = "anonymous",
-		.ca_cert_filename = "/certs/ca.crt",
-		.client_cert_filename = NULL,
-		.private_key_filename = NULL,
-		.private_key_password = NULL,
-		.pac_filename = NULL,
-		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
-	};
-
-	EapOnEthernet eapol(true, settings);
-
-	ret = eapol.checkEthernetConnection();
-	EXPECT_EQ(ERROR_NONE, ret);
-}
-
-/*
- * Testcase: (PEAP + PAP + PEAP_AUTO) ethernet connection.
- */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p1)
-{
-	error_e ret = ERROR_NONE;
-	eap_on_ethernet_s settings = {
-		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
-		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_PAP,
-		.identity = "testing",
-		.password = "password",
-		.anonymous_identity = "anonymous",
-		.ca_cert_filename = "/certs/ca.crt",
-		.client_cert_filename = NULL,
-		.private_key_filename = NULL,
-		.private_key_password = NULL,
-		.pac_filename = NULL,
-		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
-	};
-
-	EapOnEthernet eapol(true, settings);
-
-	ret = eapol.checkEthernetConnection();
-	EXPECT_EQ(ERROR_NONE, ret);
-}
-
-/*
- * Testcase: (PEAP + MSCHAP + PEAP_AUTO) ethernet connection.
- */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p2)
-{
-	error_e ret = ERROR_NONE;
-	eap_on_ethernet_s settings = {
-		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
-		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAP,
-		.identity = "testing",
-		.password = "password",
-		.anonymous_identity = "anonymous",
-		.ca_cert_filename = "/certs/ca.crt",
-		.client_cert_filename = NULL,
-		.private_key_filename = NULL,
-		.private_key_password = NULL,
-		.pac_filename = NULL,
-		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
-	};
-
-	EapOnEthernet eapol(true, settings);
-
-	ret = eapol.checkEthernetConnection();
-	EXPECT_EQ(ERROR_NONE, ret);
-}
-
-/*
  * Testcase: (PEAP + MSCHAPV2 + PEAP_AUTO) ethernet connection.
  */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p3)
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p1)
 {
 	error_e ret = ERROR_NONE;
 	eap_on_ethernet_s settings = {
@@ -241,7 +163,7 @@ TEST(EapOnEthernet, checkEthernetConnectionPEAP_p3)
 /*
  * Testcase: (PEAP + GTC + PEAP_AUTO) ethernet connection.
  */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p4)
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p2)
 {
 	error_e ret = ERROR_NONE;
 	eap_on_ethernet_s settings = {
@@ -265,14 +187,14 @@ TEST(EapOnEthernet, checkEthernetConnectionPEAP_p4)
 }
 
 /*
- * Testcase: (PEAP + PAP + PEAP_V0) ethernet connection.
+ * Testcase: (PEAP + MD5 + PEAP_AUTO) ethernet connection.
  */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p5)
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p3)
 {
 	error_e ret = ERROR_NONE;
 	eap_on_ethernet_s settings = {
 		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
-		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_PAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MD5,
 		.identity = "testing",
 		.password = "password",
 		.anonymous_identity = "anonymous",
@@ -281,33 +203,7 @@ TEST(EapOnEthernet, checkEthernetConnectionPEAP_p5)
 		.private_key_filename = NULL,
 		.private_key_password = NULL,
 		.pac_filename = NULL,
-		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_0
-	};
-
-	EapOnEthernet eapol(true, settings);
-
-	ret = eapol.checkEthernetConnection();
-	EXPECT_EQ(ERROR_NONE, ret);
-}
-
-/*
- * Testcase: (PEAP + MSCHAP + PEAP_V0) ethernet connection.
- */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p6)
-{
-	error_e ret = ERROR_NONE;
-	eap_on_ethernet_s settings = {
-		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
-		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAP,
-		.identity = "testing",
-		.password = "password",
-		.anonymous_identity = "anonymous",
-		.ca_cert_filename = "/certs/ca.crt",
-		.client_cert_filename = NULL,
-		.private_key_filename = NULL,
-		.private_key_password = NULL,
-		.pac_filename = NULL,
-		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_0
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
 	};
 
 	EapOnEthernet eapol(true, settings);
@@ -319,7 +215,7 @@ TEST(EapOnEthernet, checkEthernetConnectionPEAP_p6)
 /*
  * Testcase: (PEAP + MSCHAPV2 + PEAP_V0) ethernet connection.
  */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p7)
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p4)
 {
 	error_e ret = ERROR_NONE;
 	eap_on_ethernet_s settings = {
@@ -345,7 +241,7 @@ TEST(EapOnEthernet, checkEthernetConnectionPEAP_p7)
 /*
  * Testcase: (PEAP + GTC + PEAP_V0) ethernet connection.
  */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p8)
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p5)
 {
 	error_e ret = ERROR_NONE;
 	eap_on_ethernet_s settings = {
@@ -369,14 +265,14 @@ TEST(EapOnEthernet, checkEthernetConnectionPEAP_p8)
 }
 
 /*
- * Testcase: (PEAP + PAP + PEAP_V1) ethernet connection.
+ * Testcase: (PEAP + MD5 + PEAP_V0) ethernet connection.
  */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p9)
+TEST(EapOnEthernet, checkEthernetConnectionPEAP_p6)
 {
 	error_e ret = ERROR_NONE;
 	eap_on_ethernet_s settings = {
 		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
-		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_PAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MD5,
 		.identity = "testing",
 		.password = "password",
 		.anonymous_identity = "anonymous",
@@ -385,33 +281,7 @@ TEST(EapOnEthernet, checkEthernetConnectionPEAP_p9)
 		.private_key_filename = NULL,
 		.private_key_password = NULL,
 		.pac_filename = NULL,
-		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_1
-	};
-
-	EapOnEthernet eapol(true, settings);
-
-	ret = eapol.checkEthernetConnection();
-	EXPECT_EQ(ERROR_NONE, ret);
-}
-
-/*
- * Testcase: (PEAP + MSCHAP + PEAP_V1) ethernet connection.
- */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p10)
-{
-	error_e ret = ERROR_NONE;
-	eap_on_ethernet_s settings = {
-		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
-		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAP,
-		.identity = "testing",
-		.password = "password",
-		.anonymous_identity = "anonymous",
-		.ca_cert_filename = "/certs/ca.crt",
-		.client_cert_filename = NULL,
-		.private_key_filename = NULL,
-		.private_key_password = NULL,
-		.pac_filename = NULL,
-		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_1
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_0
 	};
 
 	EapOnEthernet eapol(true, settings);
@@ -422,8 +292,10 @@ TEST(EapOnEthernet, checkEthernetConnectionPEAP_p10)
 
 /*
  * Testcase: (PEAP + MSCHAPV2 + PEAP_V1) ethernet connection.
+ * This depends on Radius server, if it supports peapver=1 then
+ * connection should succeed.
  */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p11)
+TEST(EapOnEthernet, DISABLED_checkEthernetConnectionPEAP_p7)
 {
 	error_e ret = ERROR_NONE;
 	eap_on_ethernet_s settings = {
@@ -448,13 +320,43 @@ TEST(EapOnEthernet, checkEthernetConnectionPEAP_p11)
 
 /*
  * Testcase: (PEAP + GTC + PEAP_V1) ethernet connection.
+ * This depends on Radius server, if it supports peapver=1 then
+ * connection should succeed.
  */
-TEST(EapOnEthernet, checkEthernetConnectionPEAP_p12)
+TEST(EapOnEthernet, DISABLED_checkEthernetConnectionPEAP_p8)
 {
 	error_e ret = ERROR_NONE;
 	eap_on_ethernet_s settings = {
 		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
 		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_GTC,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_1
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (PEAP + MD5 + PEAP_V1) ethernet connection.
+ * This depends on Radius server, if it supports peapver=1 then
+ * connection should succeed.
+ */
+TEST(EapOnEthernet, DISABLED_checkEthernetConnectionPEAP_p9)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_PEAP,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MD5,
 		.identity = "testing",
 		.password = "password",
 		.anonymous_identity = "anonymous",
