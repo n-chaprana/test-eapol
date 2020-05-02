@@ -146,7 +146,6 @@ error_e EapOnEthernet::ApplyEapSettings(connection_profile_h profile)
 {
 	GLOGD("Apply EAP Settings");
 
-	connection_profile_enable_ethernet_eap(profile, use_eapol);
 	connection_profile_set_ethernet_eap_type(profile, eap_settings.type);
 
 	switch (eap_settings.type) {
@@ -226,6 +225,7 @@ error_e EapOnEthernet::checkEthernetConnection(void)
 
 	CloseConnection(profile);
 
+	connection_profile_enable_ethernet_eap(profile, use_eapol);
 	if (use_eapol) {
 		ret = ApplyEapSettings(profile);
 		if (ret != ERROR_NONE)
