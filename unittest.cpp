@@ -31,18 +31,6 @@ using ::testing::TestCase;
 using namespace std;
 
 /*
- * Testcase: Normal ethernet connection.
- */
-TEST(EapOnEthernet, checkEthernetConnectionNormal_p)
-{
-	error_e ret = ERROR_NONE;
-	EapOnEthernet eapol;
-
-	ret = eapol.checkEthernetConnection();
-	EXPECT_EQ(ERROR_NONE, ret);
-}
-
-/*
  * Testcase: MD5 ethernet connection.
  */
 TEST(EapOnEthernet, checkEthernetConnectionMD5_p)
@@ -94,9 +82,24 @@ TEST(EapOnEthernet, checkEthernetConnectionTTLS_p1)
 	EXPECT_EQ(ERROR_NONE, ret);
 }
 
+/*
+ * Testcase: Normal ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionNormal_p)
+{
+	error_e ret = ERROR_NONE;
+	EapOnEthernet eapol;
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
 int main(int argc, char **argv)
 {
 	int ret = -1;
+
+	if (system("date -s '02 May 2020 18:00:00'") == -1)
+		std::cout << "Exception occurred. (System time not updated)" << std::endl;
 
 	try {
 		testing::InitGoogleTest(&argc, argv);
