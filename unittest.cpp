@@ -57,6 +57,32 @@ TEST(EapOnEthernet, checkEthernetConnectionMD5_p)
 }
 
 /*
+ * Testcase: TLS ethernet connection.
+ */
+TEST(EapOnEthernet, checkEthernetConnectionTLS_p)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_TLS,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_NONE,
+		.identity = "private_key_filename",
+		.password = NULL,
+		.anonymous_identity = NULL,
+		.ca_cert_filename = "/certs/ca.crt",
+		.client_cert_filename = "/certs/client.pem",
+		.private_key_filename = "/certs/client.key",
+		.private_key_password = "password",
+		.pac_filename = NULL,
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
  * Testcase: (TTLS + PAP) ethernet connection.
  */
 TEST(EapOnEthernet, checkEthernetConnectionTTLS_p1)

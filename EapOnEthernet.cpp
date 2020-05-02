@@ -160,6 +160,18 @@ error_e EapOnEthernet::ApplyEapSettings(connection_profile_h profile)
 			connection_profile_set_ethernet_eap_passphrase(profile,
 				       	eap_settings.identity, eap_settings.password);
 			break;
+		case CONNECTION_ETHERNET_EAP_TYPE_TLS:
+			GLOGD("Setting TLS");
+			connection_profile_set_ethernet_eap_identity(profile,
+					eap_settings.identity);
+			connection_profile_set_ethernet_eap_client_cert_file(profile,
+					eap_settings.client_cert_filename);
+			connection_profile_set_ethernet_eap_ca_cert_file(profile,
+					eap_settings.ca_cert_filename);
+			connection_profile_set_ethernet_eap_private_key_info(profile,
+					eap_settings.private_key_filename,
+					eap_settings.private_key_password);
+			break;
 		case CONNECTION_ETHERNET_EAP_TYPE_TTLS:
 			GLOGD("Setting TTLS");
 			connection_profile_set_ethernet_eap_anonymous_identity(profile,
