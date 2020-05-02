@@ -145,11 +145,24 @@ error_e EapOnEthernet::GetEthernetProfile(connection_profile_h &profile)
 error_e EapOnEthernet::ApplyEapSettings(connection_profile_h profile)
 {
 	GLOGD("Apply EAP Settings");
+
 	connection_profile_enable_ethernet_eap(profile, use_eapol);
+	connection_profile_set_ethernet_eap_type(profile, eap_settings.type);
+
 	switch (eap_settings.type) {
 		case CONNECTION_ETHERNET_EAP_TYPE_MD5:
 			connection_profile_set_ethernet_eap_passphrase(profile,
 				       	eap_settings.identity, eap_settings.password);
+			break;
+		case CONNECTION_ETHERNET_EAP_TYPE_TTLS:
+			connection_profile_set_ethernet_eap_anonymous_identity(profile,
+					eap_settings.anonymous_identity);
+			connection_profile_set_ethernet_eap_ca_cert_file(profile,
+					eap_settings.ca_cert_filename);
+			connection_profile_set_ethernet_eap_auth_type(profile,
+					eap_settings.auth_type);
+			connection_profile_set_ethernet_eap_passphrase(profile,
+					eap_settings.identity, eap_settings.password);
 			break;
 		default:
 			GLOGD("Unhandled eap method");
