@@ -401,6 +401,60 @@ TEST(EapOnEthernet, DISABLED_checkEthernetConnectionPEAP_p9)
 }
 
 /*
+ * Testcase: (FAST + MCHAPV2) ethernet connection.
+ * This depends on proper pac file.
+ */
+TEST(EapOnEthernet, DISABLED_checkEthernetConnectionFAST_p1)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_FAST,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_MSCHAPV2,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = NULL,
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = "/opt/usr/data/network/eap-fast.pac",
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
+ * Testcase: (FAST + GTC) ethernet connection.
+ * This depends on proper pac file.
+ */
+TEST(EapOnEthernet, DISABLED_checkEthernetConnectionFAST_p2)
+{
+	error_e ret = ERROR_NONE;
+	eap_on_ethernet_s settings = {
+		.type = CONNECTION_ETHERNET_EAP_TYPE_FAST,
+		.auth_type = CONNECTION_ETHERNET_EAP_AUTH_TYPE_GTC,
+		.identity = "testing",
+		.password = "password",
+		.anonymous_identity = "anonymous",
+		.ca_cert_filename = NULL,
+		.client_cert_filename = NULL,
+		.private_key_filename = NULL,
+		.private_key_password = NULL,
+		.pac_filename = "/opt/usr/data/network/eap-fast.pac",
+		.peap_version = CONNECTION_ETHERNET_EAP_PEAP_VERSION_AUTO
+	};
+
+	EapOnEthernet eapol(true, settings);
+
+	ret = eapol.checkEthernetConnection();
+	EXPECT_EQ(ERROR_NONE, ret);
+}
+
+/*
  * Testcase: Normal ethernet connection.
  */
 TEST(EapOnEthernet, checkEthernetConnectionNormal_p)
@@ -416,7 +470,7 @@ int main(int argc, char **argv)
 {
 	int ret = -1;
 
-	if (system("date -s '02 May 2020 18:00:00'") == -1)
+	if (system("date -s '15 May 2020 18:00:00'") == -1)
 		std::cout << "Exception occurred. (System time not updated)" << std::endl;
 
 	try {
